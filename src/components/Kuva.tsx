@@ -13,19 +13,11 @@ interface Kuva{
       virhe : String,
       tiedotOk : boolean
 }
-interface State{
-  nykyinenIndex : any
-}
 interface Props {
     updateStuff : () => void,
     match : any
 }
 const Kuva : React.FC<Props> = (props : Props) => {
-    
-    const [data, setData] = useState<State>({
-      nykyinenIndex : 0
-    }
-    );
     const[kuva,setKuva] = useState<Kuva>({
         albumId: 0,
       id : 0,
@@ -86,7 +78,6 @@ const Kuva : React.FC<Props> = (props : Props) => {
       []);
     return (
       <Container>
-        
         {
           (kuva.tiedotOk) &&
           <Card className="text-center">
@@ -108,11 +99,7 @@ const Kuva : React.FC<Props> = (props : Props) => {
             {kuva.virhe}
           </Alert>
         }
-        
-        
       </Container>
-      
-        
     )
 }
 export default Kuva;

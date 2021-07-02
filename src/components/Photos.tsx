@@ -60,24 +60,19 @@ const Etusivu : React.FC<Props> = (props : Props) => {
       async function haeTiedot(){
         try{
           let index = Number(props.match.params.indeksi);
-          //let index = Number(props.match.params.shit);
           let yritettyIndex = index;
-          
           let res = await fetch("https://jsonplaceholder.typicode.com/photos");
           let merkit = await res.json();
           
-          //console.log(res);
           if(!res.ok)
             throw new Error('Virhe');
-          //"Validate index"
-          // if(index % 2 === 1)
-          //   index++;
           if(isNaN(index))
-            index = 4;
-          else if(index === 0)
-            index = 1;
-        else if(index > 6)
             index = 6;
+          else if(index < 1)
+            index = 1;
+          else if(index > 6)
+            index = 6;
+          
           SetItemsPerRow({
               items : index,
               yritettyItems : yritettyIndex
@@ -159,9 +154,11 @@ const Etusivu : React.FC<Props> = (props : Props) => {
       <Container>
         <h1>Kuvat </h1>
             {
-                (itemsPerRow.yritettyItems > 6) && <Alert variant="danger">Kuvia saa olla maksimissaan 6 per rivi</Alert>
+                (itemsPerRow.yritettyItems > 6) && <Alert variant="danger">Kuvia saa olla maksimissaan 6 per rivi. Vaihdettiin kuvien määräksi 6</Alert>
             }
-        
+            {
+                (itemsPerRow.yritettyItems < 1) && <Alert variant="danger">Kuvia pitää olla vähintään 1 per rivi. Vaihdettiin kuvien määräksi 1</Alert>
+            }
         <Row >
             <Col sm={6}>
                 <Button disabled={pages.alkuSaavutetttu} block onClick={edellinenSivu}>Edellinen</Button>
@@ -181,23 +178,17 @@ const Etusivu : React.FC<Props> = (props : Props) => {
             <Row noGutters={false}>
               {
                 data.kuvat.slice(pages.aloitusIndex, pages.lopetusIndex).map( (kuva, index) => {
-                    
                   return<Col key={index+1 + addIndexes.indexAdded} sm={Math.floor(12/itemsPerRow.items)} as={Link} to={`/kuva/${index + addIndexes.indexAdded}`}>
-                              {/* sm={Math.floor(12/itemsPerRow.items)}  */}
                             <Card >
                                 <Card.Img  variant="top" src={kuva.thumbnailUrl} />
-                                {/* <Image src={kuva.thumbnailUrl}></Image> */}
                             </Card>
                         </Col>
                 }) 
                 
               } 
             </Row>
-            
           } 
-          
       </Container>
-    
   )
 }
 export default Etusivu;
